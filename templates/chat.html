@@ -1,0 +1,23 @@
+        <div v-if="currentpage == 'Chat'">
+            <div class="wrapper">
+                <!-- bottom bar -->
+                <div class="messageBox" @change="scrollToBottom">
+                    <div v-for="(message, index) in chat_messages" :key="index">
+                        <div v-if="message.to != partner" class="message received" >
+                            <% message.message %>
+                        </div>
+                        <div v-else class="message send">
+                            <% message.message %>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inp-contain">
+                    <div class="inputsend">
+                            <button class="newbutton">New</button>
+                            <input class="input" autofocus type="text" name="" id="" v-model="message">
+                            <button class="sendbutton" style="height: 100%;" @click="sendmsg"><span class="glyphicon glyphicon-send"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
