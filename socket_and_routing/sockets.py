@@ -1,21 +1,25 @@
 from init import socketio as socket
 from packages.packages import *
+from utilities.globals import *
+from service._init_ import *
+from socket_and_routing.routing import app
 
 @socket.on("connect")
 def conntect():
+    try:
+        SocketServ().post()
+        print(SocketServ().getall())
+    except Exception as e:
+        print(e)
     print (f"{(request.sid)} connected the room with ip {request.remote_addr}")
-    if len(clients) == 0:
-        clients.append(request.sid)
-    else:
-        emit('partner',{ "user": request.sid }, room= clients[-1] )
-        emit('partner',{ "user": clients[-1] }, room= request.sid )
-        clients.pop()
-
+    
 @socket.on("disconnect")
 def disconnect():
-    if request.sid in clients:
-        clients.remove(request.sid)
-    print(f"{request.sid} disconnected")
+    print(f"{request.sid} disconnected with ip {request.remote_addr}")
+
+@socket.on("partner")
+def search():
+    pass
 
 @socket.on('message')
 def handleMessage(data):

@@ -1,0 +1,2 @@
+clients = []
+online = [0]
