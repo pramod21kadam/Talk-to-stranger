@@ -1,24 +1,4 @@
-.wrapper{
-    width: 100vw;
-    height: 95vh;
-    position: relative;
-}
-.inp-contain{
-    width: 100vw;
-    display: flex;
-    height: 4vh;
-    align-content: center;
-    position: absolute;
-    bottom: 5vh;
-    justify-content: center;
-    align-items: center;
-}
-
-.sendbutton{
-    border: none;
-    background: none;
-}
-.newbutton{
+.inputbutton{
     border: none;
     background: none;
 }
@@ -30,24 +10,23 @@
     border-bottom: 1px solid rgb(167, 165, 165);
     background: none;
     outline: none;
-    text-align: center;
+    width: 80%;
     min-width: 100px;
+    text-align: center;
     padding-bottom: 0px;
 }
 
-.inputsend{
+.inputbox{
     border-radius: 40px;
     padding: 10px;
     background-color: white;
     box-shadow: 1px 1px 3px black;
 }
-
-
-
-
-
+.panelbody{
+    height: 80%;
+}
   /* message box */
-  .messageBox{
+  /* .messageBox{
     width: 50vw;
     margin-left: 25vw;
     margin-top: 5vh;
@@ -55,54 +34,73 @@
     overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: auto;
-  }
+  } */
 
 
   /* Message bubble */
 .message{
-    position: relative;
     text-align: left;
     padding: 10px;
     margin-right: 50px;
 	background-color: #fff;
-    min-width: 250px;
-    /* width: 250px; */
-    width: 25%;
+    display: inline;
     border-radius: 1rem;
-    margin: 10px;
-    top:15px;
     box-shadow:	0 5px 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
 }
-.received{
-    margin-left: 10px;
+
+
+.panelstyling{
+    border-radius: 10px;
+    background-color: inherit;
 }
-.send{
-    margin-left: 60%;
+
+.addleft{
+    height: 100%;
+    position: absolute;
+    display: inline-block;
+    width: 25%;
+    float: left;
+}
+.addright{
+    height: 100%;
+    position: absolute;
+    display: inline-block;
+    width: 25%;
+    float: right;
+    margin-left: 2%;
+}
+
+.chatbob{
+    display: inline-block;
+    margin-left: 27%;
+    width: 46%;
+    height: 90vh;
 }
 
 
-
-
-
-
-
-
-
-
-@media(min-width: 768px) {
-    .input {width: 40vw;}
-  }
-@media( max-width: 787px) {
-    .inp-contain{
-        bottom: 20px;
+/* @media(min-width: 600px) {
+    
+  } */
+@media( max-width: 600px) {
+    .panelstyling{
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    .addleft{
+        display: block;
+    }
+    .addright{
+        display: block;
+    }
+    .chatbob{
+        width: 100%;
+        display: block;
+        margin-left: 0%;
     }
     .inputsend{
         width: 100%;
     }
-    .sendbutton{
-        width: 10%;
-    }
-    .sendbutton{
+    .imputbutton{
         width: 10%;
     }
     .input{
@@ -116,7 +114,27 @@
     .message{
         width: 25%;
     }
-    .send{
-        margin-left: 33%;
-    }
 }
+  ::-webkit-scrollbar {
+    width: 20px;
+    display: none;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    /* border-radius: 10px; */
+    width: 5px;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(187, 187, 187);
+    width: 3px; 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(187, 187, 187); 
+  }

@@ -1,23 +1,68 @@
         <div v-if="currentpage == 'Chat'">
-            <div class="wrapper">
-                <!-- bottom bar -->
-                <div class="messageBox" @change="scrollToBottom">
-                    <div v-for="(message, index) in chat_messages" :key="index">
-                        <div v-if="message.to != partner" class="message received" >
-                            <% message.message %>
-                        </div>
-                        <div v-else class="message send">
-                            <% message.message %>
-                        </div>
+            <div class="panelstyling">
+                
+                <div class="addleft"></div>
+                
+                <div class="chatbob">
+                    <div class="panelheading text-center">
+                        Heading...
                     </div>
-                </div>
-
-                <div class="inp-contain">
-                    <div class="inputsend">
-                            <button class="newbutton">New</button>
+                    <div class="panelbody" style="overflow-y: scroll; overflow-x: hidden;">
+                        <div v-for="(message, index) in chat_messages">
+                            <!-- <div v-if="message.to == partner"> -->
+                                <br>
+                                <div style="height: 13.9%; margin-top: 5px;">
+                                    <div style="">
+                                        <div v-if="message.to == partner">
+                                            <div class="message" style="display: inline; float: right;">
+                                                <%message.message%>
+                                                <br>
+                                                <div style="float: left; font-size: 12px;">
+                                                    <%(new Date).getHours()%>:<% (new Date).getMinutes() %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-else>
+                                            <div class="message" style="display: inline; float: left;">
+                                                <%message.message%>
+                                                <br>
+                                                <div style="float: right; font-size: 12px;">
+                                                    <%(new Date).getHours()%>:<% (new Date).getMinutes() %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                        </div>
+                            <!-- </div> -->
+                            <!-- <div v-else>
+                                <br>
+                                <div style="height: 13.9%; margin-top: 5px;">
+                                    <div style="">
+                                        <div class="message" style="display: inline; float: left;">
+                                            <%message.message%>
+                                            <br>
+                                            <div style="float: right; font-size: 12px;">
+                                                <%(new Date).getHours()%>:<% (new Date).getMinutes() %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                            </div> -->
+                        <!-- </div> -->
+                    </div>
+                    <div class="panelfooter text-center" style="background-color:inherit; margin-top: 10px;">
+                        <div class="inputbox">
+                            <button class="inputbutton">New</button>
                             <input class="input" autofocus type="text" name="" id="" v-model="message">
-                            <button class="sendbutton" style="height: 100%;" @click="sendmsg"><span class="glyphicon glyphicon-send"></span></button>
+                            <button class="inputbutton" style="height: 100%;" @click="sendmsg"><span class="glyphicon glyphicon-send"></span></button>
+                        </div>
                     </div>
                 </div>
+                <!-- <div class="addright" style="background-color: brown;">Right asdfads</div> -->
             </div>
         </div>
