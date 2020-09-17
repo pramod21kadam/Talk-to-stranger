@@ -1,2 +1,3 @@
 clients = []
-online = [0]
+online = 0
+rooms = []

@@ -1,38 +1,63 @@
-from packages.packages import *
-from utilities.globals import *
+from packages.flaskPackages import *
 from service._init_ import *
+from .base import *
+import utilities.globals as Global
+import init
 
-@socket.on("connect")
+
+socketio = init.socketio
+
+@socketio.on("connect")
 def conntect():
-    online[0] += 1
-    emit("online", online[0], broadcast = True)
+    SocketServ().connect(request.remote_addr)
+    Global.online += 1
+    emit("online", Global.online, broadcast = True)
     try:
         print (f"{(request.sid)} connected the room with ip {request.remote_addr}")
     except Exception as e:
         print(e)
-    
-    
-@socket.on("disconnect")
+
+@socketio.on("disconnect")
 def disconnect():
-    online[0] -= 1
-    emit("online", online[0], broadcast = True)
+    Global.online -= 1
+
+    SocketServ().disconnect(request.remote_addr)
+
+    if len(Global.clients) == 0:
+        room, boolean = searchPartner(request.sid, Global.rooms)
+        if(boolean):
+            Global.rooms.remove(room)
+            room.remove(request.sid)
+            emit('left_chat', room = room[0])
+    else:
+        Global.clients = []
+    emit("online", Global.online, broadcast = True)
     print(f"{request.sid} disconnected with ip {request.remote_addr}")
 
-@socket.on("partner")
+@socketio.on("partner")
 def search():
     try:
         print(f"partner search for {request.sid}")
-        if len(clients) != 0:
+        if len(Global.clients) != 0 and Global.clients[0] != request.sid:
+            emit("partner", request.sid, room = Global.clients[0])
+            emit("partner", Global.clients[0], room = request.sid)
+            Global.rooms.append([request.sid, Global.clients[0]])
+            Global.clients.pop()
             print("Created room")
-            print(session.get('room'))
-            emit("partner", clients[0], room=request.sid)
-            emit("partner", request.sid, room=clients[0])
-            clients.pop()
         else:
-            clients.append(request.sid)
+            Global.clients.append(request.sid)
     except Exception as e:
         print(e)
 
-@socket.on('message')
+@socketio.on('message')
 def handleMessage(data):
     emit('message', data, room = data['to'])
+
+@socketio.on('leave_room')
+def leave_room(data):
+    if data['partner'] != None:
+        emit('leave_room', room=data['partner'])
+    
+@socketio.on('typing')
+def typing(data):
+    emit('typing',room = data['partner'])

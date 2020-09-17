@@ -1,2 +1,2 @@
-from .baseDao import *
-from .socketDao import *
+from .baseDao import base
+from .socketDao import SocketDao

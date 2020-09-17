@@ -1,10 +1,10 @@
-from packages.packages import *
-from model.master import *
+from packages.flaskPackages import *
+from model.master import db
 
 class base:
     def insert(obj):
         try:
-            db.session.insert(obj)
+            db.session.add(obj)
             return True
         except exc.SQLAlchemyError as e:
             db.session.rollback()

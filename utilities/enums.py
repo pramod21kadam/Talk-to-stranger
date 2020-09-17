@@ -1,5 +1,5 @@
-class Sock:
-    sock = {
-        "connected" : "A",
-        "disconnected" : "B"
-    }
+from enum import Enum
+
+class socket(Enum):
+        connected = "A"
+        disconnected = "D"

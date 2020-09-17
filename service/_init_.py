@@ -1,1 +1,1 @@
-from .socketServ import *
+from .socketServ import SocketServ

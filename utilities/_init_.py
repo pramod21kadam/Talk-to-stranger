@@ -1,2 +1,1 @@
-from .enums import *
-from .globals import *
+from .enums import socket

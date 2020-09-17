@@ -1,6 +1,7 @@
-from packages.packages import *
-from init import create_app
-app = create_app()
+from packages.flaskPackages import *
+import init
+
+app = init.app
 
 @app.route('/', methods = ['GET'])
 def index():
