@@ -113,7 +113,6 @@ var app = new Vue({
         },
 
         inputBoxEvents(event){
-            console.log(event.key)
             switch(event.key){
                 case "Enter":
                     this.sendmsg();
