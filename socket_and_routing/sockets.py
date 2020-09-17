@@ -9,7 +9,7 @@ socketio = init.socketio
 
 @socketio.on("connect")
 def conntect():
-    SocketServ().connect(request.remote_addr)
+    # SocketServ().connect(request.remote_addr)
     Global.online += 1
     emit("online", Global.online, broadcast = True)
     try:
@@ -21,7 +21,7 @@ def conntect():
 def disconnect():
     Global.online -= 1
 
-    SocketServ().disconnect(request.remote_addr)
+    # SocketServ().disconnect(request.remote_addr)
 
     if len(Global.clients) == 0:
         room, boolean = searchPartner(request.sid, Global.rooms)

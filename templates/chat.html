@@ -41,8 +41,8 @@
 
                     <div class="panel-footer text-center" style="margin-top: 10px; background-color: inherit; border: none;">
                         <div class="inputbox" @keyup="inputBoxEvents(event);">
-                            <button class="inputbutton" id="new">
-                                Stop
+                            <button class="inputbutton" id="new" title="ESC" @click="changeUserStatus">
+                                <% new_user %>
                             </button>
                             <input class="input" autofocus type="text" name="" :disabled="partner? false : true" id="msgbox" v-model="message">
                             <button class="inputbutton" style="display: flex;" :disabled="partner? false : true" @click="sendmsg"> <div>Send</div>&nbsp;<div class="glyphicon glyphicon-send"></div></button>

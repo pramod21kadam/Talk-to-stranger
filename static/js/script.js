@@ -4,11 +4,10 @@ var app = new Vue({
     data: {
         currentpage: null,
         onLine: 0,
-        showBackOnline: false,
         socket: io(),
         timeout:null,
         partner: null,
-        oldstatus:"",
+        new_user: null,
         status: "Searching stranger...",
         message: "",
         chat_messages:[]
@@ -55,6 +54,8 @@ var app = new Vue({
             this.socket.on("partner", function(data){
                 self.status = "You are talking to random stranger. Happy chatting! 😊";
                 self.partner = data;
+                self.chat_messages = [];
+                self.new_user = "Stop";
             });
             this.socket.on('disconnect', function(){
                 self.partner = null;
@@ -66,19 +67,18 @@ var app = new Vue({
                 self.status = "Stranger is typing...";
                 self.timeout = setTimeout(()=>{ self.status = "You are talking to random stranger. Happy chatting! 😊"; }, 2000);
             });
-            this.socket.on('left_chat',function(){
+            this.socket.on('leave_room',function(){
                 self.status = "Stranger left the room";
                 self.partner = null;
+                self.new_user = "New";
             });
         },
 
 // Socket functions
         searchUser(){
-            console.log("Searching")
-            if(this.partner == null){
-                this.status = "Searching stranger...";
-                this.socket.emit('partner');
-            }
+            this.partner = null;
+            this.status = "Searching stranger...";
+            this.socket.emit('partner');
         },
         sendmsg(){
             if( this.partner != null){
@@ -94,16 +94,40 @@ var app = new Vue({
                     }
             }
         },
-        inputBoxEvents(event){
-            if(event.keyCode === 13){
-                this.sendmsg();
-                return;
+        changeUserStatus(){
+            if(this.new_user == "Stop"){
+                this.new_user = "Sure?";
             }
-            else{
-                if(this.partner!=null){
-                    this.socket.emit("typing", {"partner": this.partner});
+            else{ 
+                if(this.new_user == "Sure?"){
+                    this.status = "You left the chat";
+                    this.partner = null;
+                    this.socket.emit('leave_room',{"partner": this.partner});
+                    this.new_user = "New";
+                } 
+                else if(this.new_user == "New"){
+                    this.new_user = "Searching..";
+                    this.searchUser();
                 }
             }
+        },
+
+        inputBoxEvents(event){
+            console.log(event.key)
+            switch(event.key){
+                case "Enter":
+                    this.sendmsg();
+                    break;
+                case "Escape":
+                    this.changeUserStatus();
+                    break;
+                default:
+                    this.socket.emit("typing", {"partner": this.partner});
+                    break;
+            }
+        },
+        universalEvents(events){
+
         },
 
         // extra functions
