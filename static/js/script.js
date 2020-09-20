@@ -5,7 +5,9 @@ var app = new Vue({
         currentpage: null,
         onLine: 0,
         socket: io(),
-        timeout:null,
+        typing: null,
+        typing_timeout:null,
+        partner_timeout: null,
         partner: null,
         new_user: null,
         status: "Searching stranger...",
@@ -17,6 +19,7 @@ var app = new Vue({
     },
     mounted() {
         console.log("Vue2 mounted");
+        this.new_user = "Stop";
         this.currentpage = 'Home';
         this.ConfigureSocket();
     },
@@ -34,51 +37,57 @@ var app = new Vue({
         ConfigureSocket(){
             this.socket.io.autoConnect = false;
             this.socket.io._reconnectionAttempts = 0;
-            self = this
-            this.socket.on('connection', function() {
-                console.log("Connected to server");
-            });
-            this.socket.on('leave_room', function(){
-                self.partner = null;
-                self.status = "Stranger left the room.";
-            });
+            self = this;
+            // this.socket.on('connection', function() {
+            //     console.log("Connected to server");
+            // });
             this.socket.on('message', function(data) {
                 data['from'] = "stranger";
-                clearTimeout(self.timeout);
-                self.status = "You are talking to random stranger. Happy chatting! 😊";
+                clearTimeout(self.typing_timeout);
+                self.typing = "";
                 self.chat_messages.push(data);
             });
             this.socket.on('online',function(data){
                 self.onLine = data;
             });
+
             this.socket.on("partner", function(data){
                 self.status = "You are talking to random stranger. Happy chatting! 😊";
                 self.partner = data;
+                clearTimeout(self.partner_timeout);
                 self.chat_messages = [];
                 self.new_user = "Stop";
             });
+
             this.socket.on('disconnect', function(){
                 self.partner = null;
-                self.status = "Connection from server disconnected";
+                self.status = "Server disconnected. Try again!";
                 console.log("Server Disconnected");      
             });
             this.socket.on('typing', function(){
-                clearTimeout(self.timeout);
-                self.status = "Stranger is typing...";
-                self.timeout = setTimeout(()=>{ self.status = "You are talking to random stranger. Happy chatting! 😊"; }, 2000);
+                clearTimeout(self.typing_timeout);
+                self.typing = "Stranger is typing...";
+                self.typing_timeout = setTimeout(()=>{self.typing = ""; }, 2000);
             });
+            
             this.socket.on('leave_room',function(){
-                self.status = "Stranger left the room";
+                self.status = "Stranger left the room. Press on new button to start search.";
                 self.partner = null;
                 self.new_user = "New";
+            });
+
+            this.socket.on('keys',function(data){
+                console.log(data);
             });
         },
 
 // Socket functions
         searchUser(){
             this.partner = null;
+            clearTimeout(this.partner_timeout);
             this.status = "Searching stranger...";
             this.socket.emit('partner');
+            this.partner_timeout = setTimeout(()=>{ this.status = "TTS could not find stranger for you. Try again later."; this.new_user = "New"; }, 10000);
         },
         sendmsg(){
             if( this.partner != null){
@@ -137,5 +146,10 @@ var app = new Vue({
             }
             catch(err){}
         },
+    },
+    beforeDestroy() {
+        this.socket.disconnect();
+        this.socket.close();
+        console.log('Main Vue destroyed');
     },
 });

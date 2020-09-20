@@ -4,14 +4,13 @@
     /* background-image: url('/static/assets/doodle.png') ; */
 /* } */
 @import url('https://fonts.googleapis.com/css?family=Exo:400,700');
-
 *{
     margin: 0px;
     padding: 0px;
+    font-family: 'Exo', sans-serif;
 }
 
 body{
-    font-family: 'Exo', sans-serif;
     overflow: hidden;
 }
 
@@ -28,6 +27,9 @@ body{
     position: relative;
     color: #fff;
     font-size: 50px;
+}
+.text-center{
+    text-align:center;
 }
 
 

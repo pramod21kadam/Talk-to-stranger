@@ -4,6 +4,9 @@
     margin: 3px;
     background: none;
 }
+.panelheading{
+    font-size: 20px;
+}
 
 .input{
     border: none;
@@ -69,6 +72,9 @@
     .panelstyling{
         display: block;
         height: 93.2vh;
+    }
+    .panelheading{
+        font-size: 15px;
     }
     .addleft{
         width: auto;
