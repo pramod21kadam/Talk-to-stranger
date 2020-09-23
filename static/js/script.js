@@ -19,22 +19,26 @@ var app = new Vue({
     },
     mounted() {
         console.log("Vue2 mounted");
-        this.new_user = "Stop";
         this.currentpage = 'Home';
-        this.ConfigureSocket();
+        document.addEventListener('keydown', this.universalEvents.bind(this));
+        this.configureSocket();
     },
     methods: {
         // page change functions
         changePage(page){
-            if (page == "Home")
+            if (page == "Home"){
                 this.currentpage = page;
-            else if (page == "Chat"){
+                return;
+            }
+            if (page == "Chat"){
+                this.new_user = "Stop";
                 this.currentpage = page;
                 this.searchUser();
+                return;
             }
         },
         // Socket functions
-        ConfigureSocket(){
+        configureSocket(){
             this.socket.io.autoConnect = false;
             this.socket.io._reconnectionAttempts = 0;
             self = this;
@@ -42,19 +46,21 @@ var app = new Vue({
             //     console.log("Connected to server");
             // });
             this.socket.on('message', function(data) {
-                data['from'] = "stranger";
-                clearTimeout(self.typing_timeout);
-                self.typing = "";
-                self.chat_messages.push(data);
+                if (data['from'] == self.partner){
+                    clearTimeout(self.typing_timeout);
+                    data['from'] = "stranger";
+                    self.typing = "";
+                    self.chat_messages.push(data);
+                }
             });
             this.socket.on('online',function(data){
                 self.onLine = data;
             });
 
             this.socket.on("partner", function(data){
+                clearTimeout(self.partner_timeout);
                 self.status = "You are talking to random stranger. Happy chatting! 😊";
                 self.partner = data;
-                clearTimeout(self.partner_timeout);
                 self.chat_messages = [];
                 self.new_user = "Stop";
             });
@@ -67,7 +73,7 @@ var app = new Vue({
             this.socket.on('typing', function(){
                 clearTimeout(self.typing_timeout);
                 self.typing = "Stranger is typing...";
-                self.typing_timeout = setTimeout(()=>{self.typing = ""; }, 2000);
+                self.typing_timeout = setTimeout(()=>{self.typing = "";}, 2000);
             });
             
             this.socket.on('leave_room',function(){
@@ -87,7 +93,7 @@ var app = new Vue({
             clearTimeout(this.partner_timeout);
             this.status = "Searching stranger...";
             this.socket.emit('partner');
-            this.partner_timeout = setTimeout(()=>{ this.status = "TTS could not find stranger for you. Try again later."; this.new_user = "New"; }, 10000);
+            this.partner_timeout = setTimeout(()=>{ this.status = "TTS could not find stranger for you. Try again later."; this.socket.emit('stop_search'); this.new_user = "New"; }, 10000);
         },
         sendmsg(){
             if( this.partner != null){
@@ -95,9 +101,11 @@ var app = new Vue({
                     json = {
                             "message":this.message, 
                             "to": this.partner,
+                            "from": this.socket.io.engine.id
                         }
                     this.socket.emit('message',json);
                     json['from'] = "self";
+                    self.new_user = "Stop";
                     this.chat_messages.push(json);
                     this.message = "";
                     }
@@ -110,9 +118,9 @@ var app = new Vue({
             else{ 
                 if(this.new_user == "Sure?"){
                     this.status = "You left the chat";
-                    this.partner = null;
                     this.socket.emit('leave_room',{"partner": this.partner});
                     this.new_user = "New";
+                    this.partner = null;
                 } 
                 else if(this.new_user == "New"){
                     this.new_user = "Searching..";
@@ -121,13 +129,12 @@ var app = new Vue({
             }
         },
 
+
+//  Event functions
         inputBoxEvents(event){
             switch(event.key){
                 case "Enter":
                     this.sendmsg();
-                    break;
-                case "Escape":
-                    this.changeUserStatus();
                     break;
                 default:
                     this.socket.emit("typing", {"partner": this.partner});
@@ -135,10 +142,14 @@ var app = new Vue({
             }
         },
         universalEvents(events){
-
+            switch(event.key){
+                case "Escape":
+                    this.changeUserStatus();
+                    break;
+            }
         },
 
-        // extra functions
+// extra functions
         scrollToBottom() {
             try{
                 let element = (document.getElementById("panelbody"));

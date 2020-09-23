@@ -40,6 +40,15 @@ def search():
     except Exception as e:
         print(e)
 
+@socketio.on('stop_search')
+def stop_search():
+    try:
+        if request.sid in Global.clients:
+            Global.clients.remove(request.sid)
+    except Exception as e:
+        print(e)
+
+
 @socketio.on('message')
 def handleMessage(data):
     emit('message', data, room = data['to'])
