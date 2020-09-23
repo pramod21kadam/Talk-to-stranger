@@ -1,13 +1,26 @@
 .inputbutton{
     border: none;
-    width: 8%;
+    width: auto;
     margin: 3px;
+    color: #d6d8da;
     background: none;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-decoration: none;
 }
+.inputbutton:hover{
+    border-radius: 20px;
+    background-color: #232b2f;
+}
+.inputbutton:active{
+    box-shadow:	0px 0px 5px #75838a ;
+}
+
 .panelheading{
     font-size: 20px;
 }
-
 .input{
     border: none;
     border-bottom: 1px solid rgb(167, 165, 165);
@@ -15,16 +28,16 @@
     outline: none;
     flex-grow: 1;
     min-width: 50px;
+    margin-left: 10px;
+    margin-right: 10px;
     text-align: center;
     padding-bottom: 0px;
-}
-
+}  
 .inputbox{
     border-radius: 40px;
-    padding: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    background-color: white;
+    padding: 5px;
+    color: #d6d8da;
+    background-color: #2d383e;
     display: flex;
     box-shadow: 1px 1px 3px black;
 }
@@ -38,9 +51,8 @@
     padding: 10px;
     max-width: 80%;
     margin-right: 50px;
-    background-color: #fff;
-    border-radius: 1rem;
-    box-shadow:	0 5px 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
+    border-radius: 10px;
+    /* box-shadow:	0 5px 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2); */
 }
 
 
@@ -51,16 +63,24 @@
     overflow:auto;
     min-height: 20px;
 }
-
-.addleft{
-    background-color: inherit;
-    width: 20%;
-    margin: 2.5%;
+.send{
+    background-color: #054740;
+    display: inline; 
+    float: right;
+    margin-right: 5px;
+    color: #d6d8da;
 }
+.received{
+    background-color: #222e35;
+    display: inline;
+    float: left; 
+    color: #d6d8da;
+    margin-left: 5px;
+}
+
 .add{
     width: 20%;
-    margin: 2.5%;
-    background-color: inherit;
+    margin: 3%;
 }
 
 .chatbob{
@@ -76,10 +96,10 @@
     .panelheading{
         font-size: 15px;
     }
-    .addleft{
+    /* .addleft{
         width: auto;
         height: 10%;
-    }
+    } */
     .add{
         width: auto;
         margin-top: 10px;

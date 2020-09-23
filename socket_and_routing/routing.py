@@ -1,9 +1,9 @@
 from packages.flaskPackages import *
 import init
 
-app = init.app
+application = init.application
 
-@app.route('/', methods = ['GET'])
+@application.route('/', methods = ['GET'])
 def index():
     if "manager_1234" in request.args and request.args["manager_1234"] == "123@Iron":
         return render_template('manage.html', title="Manager")

@@ -1,15 +1,15 @@
 from packages.flaskPackages import *
 
 def create_app():
-    app = Flask(__name__)
+    application = Flask(__name__)
     
     socketio = SocketIO()
-    app.config.from_pyfile('config.cfg')
+    application.config.from_pyfile('config.cfg')
 
-    db = SQLAlchemy(app = app)
+    db = SQLAlchemy(app = application)
     from blueprints.api import api
-    app.register_blueprint(api)
-    socketio.init_app(app)
-    return app, socketio, db
+    application.register_blueprint(api)
+    socketio.init_app(application)
+    return application, socketio, db
 
-app, socketio, db = create_app()
+application, socketio, db = create_app()

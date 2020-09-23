@@ -1,6 +1,3 @@
-from packages.packages import *
-
+from packages.packages import socketio, application
 if __name__ == '__main__':
-    socketio.run(app)
-    # app.run(debug = True)
-    # app.run(debug=True, ssl_context = ('cert.pem', 'key.pem'), host='192.168.43.209', port=5000)
+    socketio.run(application, host="127.0.0.1", port=8000)
