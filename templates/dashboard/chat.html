@@ -10,13 +10,12 @@
                         </div>
                     </div>
 
-                    <div id="panelbody" style="overflow-y: scroll; overflow-x: hidden;">
+                    <div id="panelbody" style="overflow-y: auto; overflow-x: hidden; -ms-overflow-style: none; scrollbar-width: none;">
                         <div v-for="(message, index) in chat_messages" @load="scrollToBottom">
                                 <div style="margin-top: 5px; overflow:auto; height: auto; min-height: 20px;">
                                     <div>
                                         <div v-if="message.from == 'self'">
                                             <div class="message send">
-                                                
                                                 <%message.message%>
                                                 <br>
                                                 <div style="float: right; font-size: 18px;">

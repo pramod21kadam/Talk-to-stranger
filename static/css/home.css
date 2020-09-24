@@ -9,19 +9,18 @@
     border-radius: 30px; padding-top: 10px;
 }
 .startbtn{
-    background: rgb(0, 0, 0);
-    color: rgb(149, 149, 149);
+    background-color: #054740;
+    color: rgb(233, 233, 233);
     padding: 10px;
-    border: 2px solid rgb(149, 149, 149);
+    border: none;
     border-radius: 5px;
-    font-family: 'Source Code Pro', monospace;
+    /* font-family: 'Source Code Pro', monospace; */
 }
 
 .startbtn:hover{
-    background: rgb(241, 240, 240);
-    color: rgb(0, 0, 0);
-    border: 2px solid rgb(255, 253, 253);
-    box-shadow: 0px 0px 10px 0px rgb(131, 131, 131), 0px 0px 40px  rgb(131, 131, 131);
+    color: rgb(238, 238, 238);
+    /* border: 2px solid rgb(255, 253, 253); */
+    box-shadow: 0px 0px 10px 0px #033d36, 0px 0px 40px  #033d36;
 }
 
 @media screen and (max-width:600px){
