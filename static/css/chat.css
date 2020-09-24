@@ -47,6 +47,10 @@
 }
 
   /* Message bubble */
+#time{
+    float: right; 
+    font-size: 18px;
+}
 .message{
     text-align: left;
     padding: 10px;
@@ -98,10 +102,13 @@
     .panelheading{
         font-size: 15px;
     }
-    /* .addleft{
-        width: auto;
-        height: 10%;
-    } */
+
+    .message{
+        font-size: 14px;
+    }
+    #time{
+        font-size: 10px;
+    }
     .add{
         width: auto;
         margin-top: 10px;

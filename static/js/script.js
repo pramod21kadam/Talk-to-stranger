@@ -9,6 +9,7 @@ var app = new Vue({
         typing_timeout:null,
         partner_timeout: null,
         partner: null,
+        connected: null,
         new_user: null,
         status: "Searching stranger...",
         message: "",
@@ -20,6 +21,7 @@ var app = new Vue({
     mounted() {
         console.log("Vue2 mounted");
         this.currentpage = 'Home';
+        this.connected = true;
         document.addEventListener('keydown', this.universalEvents.bind(this));
         this.configureSocket();
     },
@@ -67,7 +69,9 @@ var app = new Vue({
 
             this.socket.on('disconnect', function(){
                 self.partner = null;
-                self.status = "Server disconnected. Try again!";
+                clearTimeout(self.partner_timeout);
+                self.connected = false;
+                self.status = "Server disconnected. Try reloading the page!";
                 console.log("Server Disconnected");      
             });
             this.socket.on('typing', function(){
@@ -89,14 +93,16 @@ var app = new Vue({
 
 // Socket functions
         searchUser(){
-            this.partner = null;
-            clearTimeout(this.partner_timeout);
-            this.status = "Searching stranger...";
-            this.socket.emit('partner');
-            this.partner_timeout = setTimeout(()=>{ this.status = "TTS could not find stranger for you. Try again later."; this.socket.emit('stop_search'); this.new_user = "New"; }, 10000);
+            if(this.connected){
+                this.partner = null;
+                clearTimeout(this.partner_timeout);
+                this.status = "Searching stranger...";
+                this.socket.emit('partner');
+                this.partner_timeout = setTimeout(()=>{ this.status = "TTS could not find stranger for you. Try again later."; this.socket.emit('stop_search'); this.new_user = "New"; }, 10000);
+            }
         },
         sendmsg(){
-            if( this.partner != null){
+            if( this.partner != null && this.connected){
                 if (this.message){
                     json = {
                             "message":this.message, 
@@ -112,19 +118,21 @@ var app = new Vue({
             }
         },
         changeUserStatus(){
-            if(this.new_user == "Stop"){
-                this.new_user = "Sure?";
-            }
-            else{ 
-                if(this.new_user == "Sure?"){
-                    this.status = "You left the chat";
-                    this.socket.emit('leave_room',{"partner": this.partner});
-                    this.new_user = "New";
-                    this.partner = null;
-                } 
-                else if(this.new_user == "New"){
-                    this.new_user = "Searching..";
-                    this.searchUser();
+            if (this.connected){
+                if(this.new_user == "Stop"){
+                    this.new_user = "Sure?";
+                }
+                else{ 
+                    if(this.new_user == "Sure?"){
+                        this.status = "You left the chat";
+                        this.socket.emit('leave_room',{"partner": this.partner});
+                        this.new_user = "New";
+                        this.partner = null;
+                    } 
+                    else if(this.new_user == "New"){
+                        this.new_user = "Searching..";
+                        this.searchUser();
+                    }
                 }
             }
         },
