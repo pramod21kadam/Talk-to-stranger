@@ -1,5 +1,4 @@
 .homePanel{
-    /* width: 500px; */
     margin-right: 25%;
     margin-left: 25%;
     font-size: 19px;
@@ -12,9 +11,14 @@
     background-color: #054740;
     color: rgb(233, 233, 233);
     padding: 10px;
+    margin: 30px;
     border: none;
     border-radius: 5px;
-    /* font-family: 'Source Code Pro', monospace; */
+}
+.para{
+    padding-left: 10%; 
+    padding-right: 10%; 
+    padding-top: 40px;
 }
 
 .startbtn:hover{
@@ -25,7 +29,12 @@
 
 @media screen and (max-width:600px){
     .homePanel{
+        font-size: 14px;
+        font-style: italic;
         margin-right: 0px;
         margin-left: 0px;
+    }
+    .para{
+        font-size: 14px;
     }
 }
