@@ -1,0 +1,13 @@
+<template id="modal-template-2btn">
+    <div class="modal-container-outside">
+        <div class="modal-container-inner">
+            <div class="model-title">
+               <% title %>
+            </div>
+            <div class="modal-buttons">
+                <div class="modal-button" @click="$emit('proceed-action')">Yes</div>
+                <div class="modal-button" @click="$emit('close-action')">No</div>
+            </div>
+        </div>
+    </div>
+</template>

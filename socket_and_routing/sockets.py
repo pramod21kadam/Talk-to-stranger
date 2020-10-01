@@ -19,11 +19,11 @@ def disconnect():
     print("disconnect")
     SocketServ().disconnect(request.remote_addr)
     if len(Global.clients) == 0:
-        room, boolean = searchPartner(request.sid, Global.rooms)
+        roomie, boolean = searchPartner({"sid":request.sid, "ip":request.remote_addr}, Global.rooms)
         if(boolean):
-            Global.rooms.remove(room)
-            room.remove(request.sid)
-            emit('leave_room', room = room[0])
+            Global.rooms.remove(roomie)
+            roomie.remove({"sid":request.sid, "ip":request.remote_addr})
+            emit('leave_room', room = roomie[0]["sid"])
     else:
         Global.clients = []
     emit("online", Global.online, broadcast = True)
@@ -32,14 +32,15 @@ def disconnect():
 def search():
     try:
         if len(Global.clients) != 0 and Global.clients[0] != request.sid:
-            emit("partner", request.sid, room = Global.clients[0])
+            emit("partner", {"sid":request.sid, "ip": request.remote_addr}, room = Global.clients[0]["sid"])
             emit("partner", Global.clients[0], room = request.sid)
-            Global.rooms.append([request.sid, Global.clients[0]])
+            Global.rooms.append([{"sid":request.sid, "ip": request.remote_addr}, Global.clients[0]])
             Global.clients.pop()
         else:
-            Global.clients.append(request.sid)
+            req = {"sid": request.sid, "ip": request.remote_addr}
+            Global.clients.append(req)
     except Exception as e:
-        print(e)
+        print(f"Error in partner: {e}")
 
 @socketio.on('stop_search')
 def stop_search():
@@ -47,7 +48,7 @@ def stop_search():
         if request.sid in Global.clients:
             Global.clients.remove(request.sid)
     except Exception as e:
-        print(e)
+        print(f"Error in stop search: {e}")
 
 
 @socketio.on('message')
