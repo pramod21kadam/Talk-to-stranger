@@ -7,8 +7,10 @@ def create_app():
     application.config.from_pyfile('config.cfg')
 
     db = SQLAlchemy(app = application)
-    from blueprints.api import api
-    application.register_blueprint(api)
+    
+    # from blueprints.api import api
+    # application.register_blueprint(api, url_prefix='/api')
+    
     socketio.init_app(application)
     return application, socketio, db
 

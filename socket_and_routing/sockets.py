@@ -9,15 +9,12 @@ socketio = init.socketio
 
 @socketio.on("connect")
 def conntect():
-    SocketServ().connect(request.remote_addr)
     Global.online += 1
     emit("online", Global.online, broadcast = True)
 
 @socketio.on("disconnect")
 def disconnect():
     Global.online -= 1
-    print("disconnect")
-    SocketServ().disconnect(request.remote_addr)
     if len(Global.clients) == 0:
         roomie, boolean = searchPartner({"sid":request.sid, "ip":request.remote_addr}, Global.rooms)
         if(boolean):
@@ -26,6 +23,7 @@ def disconnect():
             emit('leave_room', room = roomie[0]["sid"])
     else:
         Global.clients = []
+    IpDetailsServ().disconnect(request.remote_addr)
     emit("online", Global.online, broadcast = True)
 
 @socketio.on("partner")
