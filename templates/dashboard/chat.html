@@ -1,86 +1,59 @@
-        <div v-if="currentpage == 'Chat'">
-            <div class="panelstyling">
-                <!-- Advertisement Left-->
-                <div class="add left"></div>
-                
-                <div class="chatbob">
-                    <div class="panelheading text-center" style="color: white;">
-                            <div class="panelheading-status" style="flex-grow: 1;"><%status%></div>
-                            <div class="dot-container" @click="showDotMenu">
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                            <div class="dot-menu">
-                                <div class="dot-menu-option" @click="confirmReport"> Report stranger as bot </div>
-                            </div>
+<div v-if="currentpage == 'Chat'">
+    <div class="panelstyling">
+        <!-- Advertisement Left-->
+        <div class="add left"></div>
+        
+        <div class="chatbob">
+            <div class="panelheading text-center" style="color: white;">
+                    <div class="panelheading-status notranslate" style="flex-grow: 1;"><%status%></div>
+                    <div>
+                        <div class="dot-container" @click="showDotMenu">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="dot-menu">
+                            <div class="dot-menu-option" @click="confirmReport"> Report stranger as bot </div>
+                        </div>
                     </div>
-                    <div id="panelbody">
-                        <div v-for="(message, index) in chat_messages" @load="scrollToBottom">
-                                <div style="margin-top: 5px; overflow:auto; height: auto; min-height: 20px;">
-                                    <div>
-                                        <div v-if="message.from == 'self'">
-                                            <div v-if="index>0 && chat_messages[index-1].from == message.from">
-                                                <div class="message send">
-                                                    <%message.message%>
-                                                    <br>
-                                                    <div id="time">
-                                                        <sup>&nbsp;&nbsp;&nbsp;<%(new Date).getHours()%>:<% (new Date).getMinutes() %></sup>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div v-else>
-                                                <div class="message send tik1">
-                                                    <%message.message%>
-                                                    <br>
-                                                    <div id="time">
-                                                        <sup>&nbsp;&nbsp;&nbsp;<%(new Date).getHours()%>:<% (new Date).getMinutes() %></sup>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div v-else>
-                                            <div v-if="index>0 && chat_messages[index-1].from == message.from">
-                                                <div class="message received">
-                                                    <%message.message%>
-                                                    <br>
-                                                    <div id="time">
-                                                        <sup>&nbsp;&nbsp;&nbsp;<%(new Date).getHours()%>:<% (new Date).getMinutes() %></sup>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div v-else>
-                                                <div class="message received tik2">
-                                                    <%message.message%>
-                                                    <br>
-                                                    <div id="time">
-                                                        <sup>&nbsp;&nbsp;&nbsp;<%(new Date).getHours()%>:<% (new Date).getMinutes() %></sup>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+            </div>
+            
+            <div id="panelbody">
+                <div v-for="(message, index) in chat_messages">
+                        <div style="margin-top: 5px; overflow:auto; height: auto; min-height: 20px;">
+                            <div>
+                                <div :class="'message '+ (message.from == 'self'? ' send ':' received ')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 13" :class="(index>0 && chat_messages[index-1].from == message.from)? 'none': (message.from != 'self'? ' leftt ': ' rightt ')" >
+                                        <path fill="currentColor" d="M5.188 0H0v11.193l6.467-8.625C7.526 1.156 6.958 0 5.188 0z"></path>
+                                    </svg>
+                                    <%message.message%>
+                                    <br>
+                                    <div id="time" class="notranslate">
+                                        <sup>&nbsp;&nbsp;&nbsp;<% (new Date).toLocaleString('en-US', { hour: 'numeric', hour12: true , minute:"2-digit"}) %></sup>
                                     </div>
                                 </div>
-                        </div>
-                    </div>
-                    
-                    <div class="inputboxContainer text-center" style="position: absolute; bottom: 0%; margin-bottom: 20px; border: none;">
-                        <div style="height:5px; padding-left: 20px; float: left; font-size: 12px; bottom:3%; color: white;">
-                            <% typing %>
-                        </div>
-                        <br>
-                        <div class="inputbox" @keyup="inputBoxEvents(event);">
-                            <div class="inputbutton" title="ESC" @click="changeUserStatus">
-                                <% new_user %>
                             </div>
-                            <input class="input" autofocus type="text" name="" :disabled="partner? false : true" id="msgbox" v-model="message" placeholder="Type Here">
-                            <div class="inputbutton" style="display: flex;" :disabled="partner? false : true" @click="sendmsg"><span class="glyphicon glyphicon-send"></span></div>
                         </div>
-                        
-                    </div>
                 </div>
+            </div>
 
-                <!-- Advertisement Right-->
-                <div class="add right"></div>
+            <div class="inputboxContainer text-center">
+                <div style="height:5px; padding-left: 20px; float: left; font-size: 12px; bottom:3%; color: white;" class="notranslate">
+                    <% typing %>
+                </div>
+                <br>
+                <div class="inputbox" @keyup="inputBoxEvents(event);">
+                    <div class="inputbutton" id="status-btn" title="ESC" @click="changeUserStatus">
+                        <% new_user.status %>
+                    </div>
+                    <input class="input" autocomplete="off" autofocus type="text" name="" :disabled="partner? false : true" id="msgbox" v-model="message" placeholder="Type Here">
+                    <div class="inputbutton" style="display: flex;" :disabled="partner? false : true" @click="sendmsg"><span class="glyphicon glyphicon-send"></span></div>
+                </div>
+                
             </div>
         </div>
+
+        <!-- Advertisement Right-->
+        <div class="add right"></div>
+    </div>
+</div>

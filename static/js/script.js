@@ -11,22 +11,31 @@ var app = new Vue({
         partner: null,
         partner_ip: null,
         connected: null,
-        new_user: null,
+        new_user: {
+            status: "Stop",
+            code: 0
+        },
         status: "Searching stranger...",
         message: "",
         chat_messages:[],
         three_dot_menu:false,
         yesNoModal:{
-            title: "Do you want to report stranger?",
+            title:"",
             show: false,
+            subtitle: "",
+            buttons:{
+                type: 2,
+                lables: ['Yes', 'No']
+            },
             para:[],
             method: null
         }
     },
     updated() {
-        chat_message:this.scrollToBottom();
+        this.scrollToBottom();
     },
-    mounted() {
+    watch: {},
+    mounted: function() {
         console.log("Vue2 mounted");
         this.currentpage = 'Home';
         this.connected = true;
@@ -34,20 +43,19 @@ var app = new Vue({
         this.configureSocket();
     },
     methods: {
-        // page change functions
+// page change functions
         changePage(page){
             switch (page) {
                 case "Home":
                     this.currentpage = page;
                     break;
                 case "Chat":
-                    this.new_user = "Stop";
                     this.currentpage = page;
                     this.searchUser();
                     break;
             }
         },
-        // Socket functions
+// Socket configurations
         configureSocket(){
             this.socket.io.autoConnect = false;
             this.socket.io._reconnectionAttempts = 0;
@@ -71,31 +79,43 @@ var app = new Vue({
                 self.partner = data.sid;
                 self.partner_ip = data.ip;
                 self.chat_messages = [];
-                self.new_user = "Stop";
+                self.new_user.status = "Stop";
+                self.new_user.code = 0;
             });
 
             this.socket.on('disconnect', function(){
                 self.partner = null;
                 clearTimeout(self.partner_timeout);
                 self.connected = false;
-                self.status = "Server disconnected. Try reloading the page!";
-                console.log("Server Disconnected");      
+                self.status = "Server disconnected. Try reloading the page!";     
             });
             this.socket.on('typing', function(){
-                clearTimeout(self.typing_timeout);
-                self.typing = "Stranger is typing...";
-                self.typing_timeout = setTimeout(()=>{self.typing = "";}, 2000);
+                if(self.partner){
+                    clearTimeout(self.typing_timeout);
+                    self.typing = "Stranger is typing...";
+                    self.typing_timeout = setTimeout(()=>{self.typing = "";}, 2000);
+                }
             });
             
             this.socket.on('leave_room',function(){
                 self.status = "Stranger left the room. Press on new button to start search.";
                 self.partner = null;
-                self.new_user = "New";
+                self.new_user.status = "New";
+                self.new_user.code = 2;
             });
 
             this.socket.on('keys',function(data){
                 console.log(data);
             });
+
+            this.socket.on('reload', function(){
+                window.location.reload();
+            });
+
+            this.socket.on('redirect', function(data){
+                window.location.replace(data.location);
+            });
+
         },
 
 // Socket functions
@@ -105,7 +125,7 @@ var app = new Vue({
                 clearTimeout(this.partner_timeout);
                 this.status = "Searching stranger...";
                 this.socket.emit('partner');
-                this.partner_timeout = setTimeout(()=>{ this.status = "TTS could not find stranger for you. Try again later."; this.socket.emit('stop_search'); this.new_user = "New"; }, 10000);
+                this.partner_timeout = setTimeout(()=>{ this.status = "TTS could not find stranger for you. Try again later."; this.socket.emit('stop_search'); this.new_user.status = "New"; this.new_user.code = 2; }, 10000);
             }
         },
         sendmsg(){
@@ -118,7 +138,8 @@ var app = new Vue({
                         }
                     this.socket.emit('message',json);
                     json['from'] = "self";
-                    self.new_user = "Stop";
+                    self.new_user.status = "Stop";
+                    self.new_user.code = 0;
                     this.chat_messages.push(json);
                     this.message = "";
                     }
@@ -126,24 +147,23 @@ var app = new Vue({
         },
         changeUserStatus(){
             if (this.connected){
-                if(this.new_user == "Stop"){
-                    this.new_user = "Sure?";
-                }
-                else{ 
-                    if(this.new_user == "Sure?"){
+                switch(this.new_user.code){
+                    case 0:
+                        this.new_user = { status: "Sure?", code: 1 };
+                        break;
+                    case 1:
+                        this.new_user = { status: "New", code: 2 };
                         this.status = "You left the chat";
-                        this.socket.emit('leave_room',{"partner": this.partner});
-                        this.new_user = "New";
                         this.partner = null;
-                    } 
-                    else if(this.new_user == "New"){
-                        this.new_user = "Searching..";
+                        this.socket.emit('leave_room',{"partner": this.partner});
+                        break;
+                    case 2:
+                        this.new_user = { status: "Searching..", code: -1 };
                         this.searchUser();
-                    }
+                        break
                 }
             }
         },
-
 
 //  Event functions
         inputBoxEvents(event){
@@ -176,18 +196,44 @@ var app = new Vue({
             this.yesNoModal={
                 title: "Do you want to report stranger?",
                 show: false,
-                para:[],
+                para:[this.chat_messages],
                 method: null
             }
         },
         showDotMenu(){
-            if(this.partner_ip){
+            if(this.partner_ip && this.connected){
                 if(!this.three_dot_menu)
                     document.getElementsByClassName("dot-menu")[0].style.visibility = 'visible';
                 else
                     document.getElementsByClassName("dot-menu")[0].style.visibility = 'hidden';
                 this.three_dot_menu = !this.three_dot_menu;
             }
+        },
+
+// api calls
+        reportStranger(){
+            url = "/api/report";
+            data = JSON.stringify({
+                ip: this.partner_ip,
+                chat: this.chat_messages
+            });
+            self = this;
+            response =  apiCall(url, "POST", data);
+            response.then(data =>{
+                if(data.status="failure"){
+                    this.yesNoModal={
+                        title:data.message,
+                        show: true,
+                        subtitle: "",
+                        para:[],
+                        method: null,
+                        buttons:{
+                            type: 1,
+                            lables: ["Okay"]
+                        }
+                    }
+                }
+            });
         },
 
 // Other functions
@@ -199,20 +245,21 @@ var app = new Vue({
             catch(err){}
         },
         confirmReport(){
-            this.showDotMenu();
-            this.yesNoModal.title = "Do you want to report stranger?";
-            this.yesNoModal.method = 0;
-            this.yesNoModal.show = true
-        },
-        reportStranger(){
-            url = "/api/report";
-            data = JSON.stringify({
-                Stranger_ip: this.Stranger_ip
-            });
-            response =  apiCall(url, "POST", data);
-            response.then(() =>{
-                console.log(response);
-            })
+            if(this.connected){
+                this.showDotMenu();
+                this.yesNoModal.title = "Do you want to report stranger? ";
+                this.yesNoModal.subtitle = "This conversation will be analysed.";
+                this.yesNoModal.method = 0;
+                this.yesNoModal.show = true;
+                this.yesNoModal.buttons = {
+                    type: 2,
+                    lables: ['Yes', 'No']
+                };
+            }
+            else{
+                document.getElementsByClassName("dot-menu")[0].style.visibility = 'hidden';
+                this.three_dot_menu = !this.three_dot_menu;
+            }
         },
     },
     beforeDestroy() {

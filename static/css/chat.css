@@ -3,25 +3,29 @@
     display: none;
   }
   
-  /* Track */
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey; 
-    /* border-radius: 10px; */
-    width: 5px;
-  }
-   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: rgb(187, 187, 187);
-    width: 3px; 
-    border-radius: 10px;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgb(187, 187, 187); 
-  }
+/* Track */
+::-webkit-scrollbar-track {
+box-shadow: inset 0 0 5px grey; 
+/* border-radius: 10px; */
+width: 5px;
+}
 
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: rgb(187, 187, 187);
+width: 3px; 
+border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: rgb(187, 187, 187); 
+}
+
+:root{
+    --message-send-color:#054740;
+    --message-receive-color:#222e35;
+}
 
 .inputbutton{
     border: none;
@@ -53,8 +57,6 @@
     margin-left: 10px;
     margin-right: 10px;
     text-align: center;
-    /* border-radius: 30px; */
-    /* box-shadow: 8px 8px 14px 0 #20282c inset, -8px -8px 12px 0 #475962 inset; */
     padding-bottom: 0px;
 }  
 .inputbox{
@@ -67,10 +69,13 @@
 }
 #panelbody{
     height: 80%;
+    flex-grow: 1;
+    position: relative;
     overflow-y: auto; 
     overflow-x: hidden; 
     -ms-overflow-style: none; 
     scrollbar-width: none;
+    border: none;
 }
 
 .panelheading{
@@ -90,7 +95,6 @@
     padding-bottom: 0px;
     max-width: 80%;
     font-size: 15px;
-    margin-right: 50px;
     border-radius: 8px;
     word-wrap: break-word;
     margin-right: 5px;
@@ -102,34 +106,10 @@
     float: right;
     margin-right: 20px;
 }
-.tik1:before{
-    content: "";
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    border-left: 10px solid#054740;
-    border-right: 10px solid transparent;
-    border-top: 15px solid #054740;
-    border-bottom: 12px solid transparent;
-    right: -14px;
-    top: 0px;
-}
-.tik2:before{
-    content: "";
-    width: 0px;
-    height: 0px;
-    position: absolute;
-    border-left: 10px solid transparent;
-    border-right: 10px solid #222e35;
-    border-top: 15px solid #222e35;
-    border-bottom: 12px solid transparent;
-    left: -14px;
-    top: 0px;
-}
 
 .received{
     margin-left: 20px;
-    background-color: #222e35;
+    background-color: var(--message-receive-color);
     float: left;
 }
 
@@ -156,6 +136,11 @@
 }
 .inputboxContainer{
     width: 50%;
+    position: absolute; 
+    display: block; bottom: 0%;
+    margin-bottom: 20px;
+    /* transform: translateY(-100%);  */
+    border: none;
 }
 @media( max-width: 750px) {
     /* panels */
@@ -190,30 +175,18 @@
 
     /* Message */
     .message{
+        padding: 5px;
         font-size: 14px;
     }
-    .tik1:before{
-        border-left: 10px solid#054740;
-        border-right: 6px solid transparent;
-        border-top: 11px solid #054740;
-        border-bottom: 8px solid transparent;
-        right: -8px;
-        top: 0px;
-    }
-    .tik2:before{
-        border-left: 6px solid transparent;
-        border-right: 10px solid #222e35;
-        border-top: 11px solid #222e35;
-        border-bottom: 8px solid transparent;
-        left: -8px;
-        top: 0px;
-    }
+
     #time{
         font-size: 10px;
     }
 
     .inputboxContainer{
-        width: 100%; 
+        width: 100%;
+        margin-bottom: 0px;
+        transform: translateY(-100%);
     }
     .inputsend{
         width: 100%;
@@ -225,11 +198,6 @@
     .input{
         font-size: 13px;
         width: 70%;
-    }
-    .messageBox{
-        width: 100%;
-        margin-left: 0vw;
-        height: 70vh;
     }
 }
   
@@ -300,5 +268,34 @@
         color: #d4d5d7;
         cursor: pointer;
         font-size: 12px;
+    }
+}
+
+.rightt{ 
+    color: var(--message-send-color);
+    right: -11px;
+}
+.leftt, .rightt{
+    width: 20px; 
+    position:absolute; 
+    top: 0px;
+}
+.leftt{
+    color: var(--message-receive-color);
+    left: -12px;
+    transform: rotateY(180deg);
+}
+.none{
+    display: none;
+}
+@media (max-width:750px){
+    .leftt, .rightt{
+        width: 12px;
+    }
+    .rightt{
+        right: -6px;
+    }
+    .leftt{
+        left: -7px;
     }
 }

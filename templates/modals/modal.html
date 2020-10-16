@@ -1,12 +1,17 @@
 <template id="modal-template-2btn">
     <div class="modal-container-outside">
         <div class="modal-container-inner">
-            <div class="model-title">
+            <div class="model-title noselect">
                <% title %>
+               <br>
+               <% subtitle%>
             </div>
-            <div class="modal-buttons">
-                <div class="modal-button" @click="$emit('proceed-action')">Yes</div>
-                <div class="modal-button" @click="$emit('close-action')">No</div>
+            <div class="modal-buttons" v-if="button.type == 2">
+                <div class="modal-button noselect" @click="$emit('proceed-action')"> <% button.lables[0] %></div>
+                <div class="modal-button noselect" @click="$emit('close-action')"><% button.lables[1] %></div>
+            </div>
+            <div class="modal-buttons" v-if="button.type == 1">
+                <div class="modal-button noselect" @click="$emit('proceed-action')"> <% button.lables[0] %></div>
             </div>
         </div>
     </div>

@@ -34,7 +34,7 @@
             {% include 'dashboard/chat.html' %}
             <!-- <footer class="text-center" style="color: rgb(149, 149, 149);position: sticky;bottom: 10px;" >Enjoy chatting</footer> -->
         </div>
-        <modal2btn :title="yesNoModal.title" @proceed-action="yesNoModal.show = false; handle2buttonPopup();" v-if="yesNoModal.show" @close-action="yesNoModal.show = false; reset2btnModal();" >
+        <modal2btn :title="yesNoModal.title" :subtitle="yesNoModal.subtitle" :button="yesNoModal.buttons" @proceed-action="yesNoModal.show = false; handle2buttonPopup();" v-if="yesNoModal.show" @close-action="yesNoModal.show = false; reset2btnModal();" >
         </modal2btn>
     </div>
     {% include 'modals/modal.html' %}

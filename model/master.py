@@ -7,7 +7,7 @@ class IpDetails(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True, nullable = False)
     ip_address = db.Column(db.String(20), primary_key=True, nullable = False)
     sid = db.Column(db.String(50), nullable=True)
-    screen_time = db.Column(db.Time, nullable = True, default = "00:00:00")
+    screen_time = db.Column(db.Interval, nullable = True)
     status = db.Column(db.String(1), nullable=False)
 
     def __init__(self, ip_address,status = socket.connected.value):

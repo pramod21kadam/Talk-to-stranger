@@ -9,7 +9,7 @@ class ReportBotCtrl(MethodView):
             if True:
                 boolean, msg = ReportBotServ().report(data)
                 if boolean:
-                    return successRes("Added Successfully"), 200
+                    return successRes("Done"), 200
                 else:
                     return failureRes(f"{msg}"), 500
             return failureRes("Invalid"), 422

@@ -1,15 +1,16 @@
 function apiCall(apiUrl, methodType, dataBody=null) {
     return fetch(apiUrl, {
             method: methodType,
-            body: dataBody,
-            // credentials: 'include',
+            body: dataBody
         })
         .then(response => {
-            if (response.status == 200) {
-                return response.json()
-            } else{
-                console.log(status);
-                return response.status
-            }
+            return response.json()
         })
+}
+function googleTranslateElementInit(){
+    new google.translate.TranslateElement({
+        pageLanguage: 'en',
+    }, 'google_translate_element');
+    document.getElementsByClassName("skiptranslate goog-te-gadget")[0].children[1].innerHTML="";
+    document.getElementsByClassName("skiptranslate goog-te-gadget")[0].childNodes[1].data = "";
 }

@@ -11,6 +11,7 @@ socketio = init.socketio
 def conntect():
     Global.online += 1
     emit("online", Global.online, broadcast = True)
+    IpDetailsServ().update(request.sid, request.remote_addr)
 
 @socketio.on("disconnect")
 def disconnect():
@@ -23,20 +24,28 @@ def disconnect():
             emit('leave_room', room = roomie[0]["sid"])
     else:
         Global.clients = []
+    try:
+        Global.banned_ip.remove(request.remote_addr)
+    except:
+        pass
+    Global.active.remove(request.remote_addr)
     IpDetailsServ().disconnect(request.remote_addr)
     emit("online", Global.online, broadcast = True)
 
 @socketio.on("partner")
 def search():
     try:
-        if len(Global.clients) != 0 and Global.clients[0] != request.sid:
-            emit("partner", {"sid":request.sid, "ip": request.remote_addr}, room = Global.clients[0]["sid"])
-            emit("partner", Global.clients[0], room = request.sid)
-            Global.rooms.append([{"sid":request.sid, "ip": request.remote_addr}, Global.clients[0]])
-            Global.clients.pop()
-        else:
-            req = {"sid": request.sid, "ip": request.remote_addr}
-            Global.clients.append(req)
+        if request.remote_addr in Global.banned_ip:
+            emit('reload', room = request.sid)
+        elif Global.clients[0]['sid'] != request.sid:
+            if len(Global.clients) != 0:
+                emit("partner", {"sid":request.sid, "ip": request.remote_addr}, room = Global.clients[0]['sid'])
+                emit("partner", Global.clients[0], room = request.sid)
+                Global.rooms.append([{"sid":request.sid, "ip": request.remote_addr}, Global.clients[0]])
+                Global.clients.pop()
+            else:
+                req = {'sid': request.sid, 'ip': request.remote_addr}
+                Global.clients.append(req)
     except Exception as e:
         print(f"Error in partner: {e}")
 

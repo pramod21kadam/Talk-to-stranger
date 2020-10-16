@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Exo:400,700');
 *{
     margin: 0px;
     padding: 0px;
@@ -329,4 +328,44 @@ html{
         animation-delay: 2s;
         animation-duration: 35s;
     }
+}
+
+
+
+select{
+    border: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    color: white;
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    background: #222e35 url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png") no-repeat 95%;
+}
+select::-ms-expand { 
+    display: none; 
+}
+.goog-te-banner-frame.skiptranslate {
+    display: none !important;
+}
+
+body {
+    top: 0px !important;
+}
+#google_translate_element{
+}
+.translate-nav-wrapper{
+    text-decoration: none;
+    margin-left: 5px;
+    float: right;
+    margin-top: 5px;
+    text-decoration: none;
+    display: block;
+    color: rgb(149, 149, 149);
+    text-align: center;
+    padding-top: 10px;
+    font-size: 15px;
+    font-weight: bolder;
+    font-style: italic;
 }
