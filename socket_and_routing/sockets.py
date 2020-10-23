@@ -37,12 +37,13 @@ def search():
     try:
         if request.remote_addr in Global.banned_ip:
             emit('reload', room = request.sid)
-        elif Global.clients[0]['sid'] != request.sid:
-            if len(Global.clients) != 0:
+            print("Checked")
+        else:
+            if len(Global.clients) != 0 and Global.clients[0]['sid'] != request.sid:
                 emit("partner", {"sid":request.sid, "ip": request.remote_addr}, room = Global.clients[0]['sid'])
                 emit("partner", Global.clients[0], room = request.sid)
                 Global.rooms.append([{"sid":request.sid, "ip": request.remote_addr}, Global.clients[0]])
-                Global.clients.pop()
+                Global.clients.pop(0)
             else:
                 req = {'sid': request.sid, 'ip': request.remote_addr}
                 Global.clients.append(req)
