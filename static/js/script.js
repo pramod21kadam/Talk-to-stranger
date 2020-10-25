@@ -154,8 +154,8 @@ var app = new Vue({
                     case 1:
                         this.new_user = { status: "New", code: 2 };
                         this.status = "You left the chat";
-                        this.partner = null;
                         this.socket.emit('leave_room',{"partner": this.partner});
+                        this.partner = null;
                         break;
                     case 2:
                         this.new_user = { status: "Searching..", code: -1 };
