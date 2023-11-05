@@ -61,7 +61,7 @@ var app = new Vue({
             this.socket.io._reconnectionAttempts = 0;
             self = this;
             this.socket.on('message', function(data) {
-                if (data['from'] == self.partner){
+                                if (data['from'] == self.partner){
                     clearTimeout(self.typing_timeout);
                     data['from'] = "stranger";
                     self.typing = "";
@@ -76,7 +76,7 @@ var app = new Vue({
             this.socket.on("partner", function(data){
                 clearTimeout(self.partner_timeout);
                 self.status = "You are talking to random stranger. Happy chatting! 😊";
-                self.partner = data.sid;
+                                self.partner = data.sid;
                 self.partner_ip = data.ip;
                 self.chat_messages = [];
                 self.new_user.status = "Stop";
@@ -133,8 +133,7 @@ var app = new Vue({
                 if (this.message){
                     json = {
                             "message":this.message, 
-                            "to": this.partner,
-                            "from": this.socket.io.engine.id
+                            "to": this.partner
                         }
                     this.socket.emit('message',json);
                     json['from'] = "self";
