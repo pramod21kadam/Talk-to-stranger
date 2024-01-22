@@ -53,7 +53,7 @@ class SocketNameSpace(Namespace):
         data["from"] = request.sid
         emit('message', data, room = data['to'])
     
-    def on_leave_room(self):
+    def on_leave_room(self, data):
         if data['partner'] != None:
             emit('leave_room', room=data['partner'])
     
