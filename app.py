@@ -1,4 +1,5 @@
-# from packages.packages import socketio, application
+import sys
+sys.path.insert(0,'./src')
 from init import Application
 
 if __name__ == '__main__':

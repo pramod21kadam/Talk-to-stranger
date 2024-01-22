@@ -1,6 +1,5 @@
-from packages.flaskPackages import *
 from utilities.enums import *
-import init
+import src.init as init
 db = init.db
 
 class IpDetails(db.Model):

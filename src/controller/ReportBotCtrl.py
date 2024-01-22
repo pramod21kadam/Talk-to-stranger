@@ -1,4 +1,5 @@
-from packages.flaskPackages import *
+from flask import request
+from flask.views import MethodView
 from .base import *
 from service.reportbotServ import ReportBotServ
 

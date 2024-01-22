@@ -1,6 +1,7 @@
+from flask import render_template, request
 from flask.views import MethodView
 import utilities.globals as globals
-from packages.flaskPackages import *
+from .base import *
 
 class HomeController(MethodView):
     def get(self, id):

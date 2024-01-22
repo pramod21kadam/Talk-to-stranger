@@ -1,4 +1,4 @@
-from packages.flaskPackages import *
+from flask import request
 from .base import *
 from flask_socketio import Namespace, emit
 import utilities.globals as Global

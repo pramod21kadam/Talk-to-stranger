@@ -1,4 +1,4 @@
-from packages.flaskPackages import *
+from sqlalchemy import exc
 from model.master import db
 from packages.packages import *
 

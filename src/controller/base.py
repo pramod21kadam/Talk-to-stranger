@@ -1,5 +1,4 @@
 from jsonschema import Draft7Validator
-from flask.views import MethodView
 from flask import jsonify
 import json
 from schema._init_ import *

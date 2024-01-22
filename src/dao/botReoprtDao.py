@@ -1,10 +1,12 @@
-from packages.flaskPackages import *
+import datetime
+from operator import and_
+from sqlalchemy import func
 from model.master import *
 
 class BotReportDao:
     def getCount(by_index):
         try:
-            since = datetime.now() - timedelta(hours=24)
+            since = datetime.now() - datetime.timedelta(hours=24)
             count = db.session.query(func.count(BotReport.id)).\
                 filter(and_(BotReport.time > since, BotReport.reported_by_index == by_index)).all()
             return count[0][0]
@@ -14,7 +16,7 @@ class BotReportDao:
 
     def getRepCount(id):
         try:
-            since = datetime.now() - timedelta(hours=24)
+            since = datetime.now() - datetime.timedelta(hours=24)
             count = db.session.query(func.count(BotReport.id)).\
                 filter(and_(BotReport.time > since, BotReport.reported_ip_index == id)).all()
             return count[0][0]

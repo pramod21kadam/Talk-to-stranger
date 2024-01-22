@@ -1,6 +1,6 @@
 from model.master import *
 from dao._init_ import *
-import init
+import src.init as init
 import utilities.globals as Global
 
 sock = init.socketio
