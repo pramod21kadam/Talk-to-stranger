@@ -4,7 +4,7 @@ from controller._init_ import *
 
 api = Blueprint('api', __name__, template_folder='templates')
 
-def register_api(view, endpoint:str, url:str, pk:str='id', pk_type:str='int') -> None:
+def register_api(view:MethodView, endpoint:str, url:str, pk:str='id', pk_type:str='int') -> None:
     print("registered api endpoint=%s url=%s" %(endpoint, url))
     view_func = view.as_view(endpoint)
     api.add_url_rule(url, defaults={pk: None}, view_func=view_func, methods=['GET', 'PATCH', 'PUT', 'DELETE'])

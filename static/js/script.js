@@ -1,3 +1,11 @@
+class Socket{
+    Socket(socket){
+        this.socket = socket;
+    }
+
+
+}
+
 var app = new Vue({
     el: "#app",
     delimiters: ["<%","%>"],
@@ -29,18 +37,33 @@ var app = new Vue({
             },
             para:[],
             method: null
+        },
+
+        peer_connection: null,
+        offer: null,
+        data_channel: null,
+        config_ice :{
+            iceServers: [
+                { urls: "stun:stun.l.google.com:19302" } // Use Google's public STUN server
+            ]
         }
     },
     updated() {
         this.scrollToBottom();
     },
     watch: {},
-    mounted: function() {
+    mounted: function() { 
         console.log("Vue2 mounted");
         this.currentpage = 'Home';
         this.connected = true;
         document.addEventListener('keydown', this.universalEvents.bind(this));
         this.configureSocket();
+        this.peer_connection = new RTCPeerConnection(this.config);
+        this.peer_connection.onicecandidate = (event) => {
+            if (event.candidate) {
+                console.log("New ICE candidate:", JSON.stringify(event.candidate));
+            }
+        };
     },
     methods: {
 // page change functions
@@ -124,6 +147,8 @@ var app = new Vue({
                 this.partner = null;
                 clearTimeout(this.partner_timeout);
                 this.status = "Searching stranger...";
+                console.log("printing connectionasdf");
+                console.log(this.socket.connected)
                 this.socket.emit('partner');
                 this.partner_timeout = setTimeout(()=>{ this.status = "TTS could not find stranger for you. Try again later."; this.socket.emit('stop_search'); this.new_user.status = "New"; this.new_user.code = 2; }, 10000);
             }

@@ -17,5 +17,6 @@ class Application:
         
         self.socketio.init_app(self.application)
     
-    def run(self):
-        self.socketio.run(app=self.application)
+    # def run(self):
+    #     print("Running app ")
+    #     self.socketio.run(app=self.application, debug=False)

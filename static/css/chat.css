@@ -145,6 +145,7 @@ background: rgb(187, 187, 187);
 @media( max-width: 750px) {
     /* panels */
     #panelbody{
+        margin-top: 20px;
         height: 80%;
         margin-bottom: 10%;
     }
