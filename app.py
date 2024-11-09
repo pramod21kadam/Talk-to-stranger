@@ -29,6 +29,6 @@ class Application:
 instance = Application()
 application = instance.application
 socketio = instance.socketio
-# if __name__ == '__main__':
 
-#     socketio.run(app=application)
+if __name__ == '__main__':
+    socketio.run(app=application)
