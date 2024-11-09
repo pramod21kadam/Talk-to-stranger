@@ -12,7 +12,7 @@ var app = new Vue({
     data: {
         currentpage: null,
         onLine: 0,
-        socket: io(),
+        socket: null,
         typing: null,
         typing_timeout:null,
         partner_timeout: null,
@@ -54,6 +54,7 @@ var app = new Vue({
     watch: {},
     mounted: function() { 
         console.log("Vue2 mounted");
+        this.socket = io.connect(window.location.href + "sockets")
         this.currentpage = 'Home';
         this.connected = true;
         document.addEventListener('keydown', this.universalEvents.bind(this));
